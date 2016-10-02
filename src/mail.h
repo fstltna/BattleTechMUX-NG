@@ -119,5 +119,5 @@ extern void check_mail_expiration(void);
 extern void check_mail(dbref, int, int);
 extern void do_mail_purge(dbref);
 
-extern void sendEmail(const char *, const char *, const char *);
+extern void sendSystemEmail(const char *, const char *);
 #endif

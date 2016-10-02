@@ -268,7 +268,7 @@ dbref connect_player(char *name, char *password, char *host, char *username)
 }
 
 /**
- * Create a new player.
+ * Create a new player.   ZZZ
  */
 dbref create_player(char *name, char *password, dbref creator, int isrobot,
 					int isguest)
@@ -276,6 +276,7 @@ dbref create_player(char *name, char *password, dbref creator, int isrobot,
 	dbref player;
 	char *pbuf;
 	struct commac *c;
+	char MessageBody[2048];
 
 	/*
 	 * Make sure the password is OK.  Name is checked in create_obj 
@@ -319,6 +320,8 @@ dbref create_player(char *name, char *password, dbref creator, int isrobot,
 	s_Home(player, start_home());
 	s_Fixed(player);
 	free_lbuf(pbuf);
+	sprintf(MessageBody, "Player %s just signed up at Mek City\n", name);
+	sendSystemEmail("New user at Mek City", MessageBody);
 	return player;
 }
 
