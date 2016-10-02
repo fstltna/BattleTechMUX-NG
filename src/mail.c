@@ -3299,3 +3299,23 @@ void do_malias_status(dbref player)
 		notify_printf(player, "MAIL: Allocated slots %d", ma_size);
 	}
 }
+
+/* Sends an email */
+void sendEmail(const char *sendto, const char *subject, const char *emailbody)
+{
+        char cmd[1024]; /* holds the cli command */
+        char tempFile[100];
+
+        strcpy(tempFile, tempnam("/tmp", "sendmail")); /* generate temp file name. */
+        FILE *fp = fopen(tempFile, "w"); /* open it for writing. */
+        fprintf(fp, "From: %s\r\n", "BTMUX Admin"); /* add sender ZZZ add to config */
+        fprintf(fp, "Subject: %s\r\n", subject); /* Add subject */
+        fprintf(fp, "\r\n"); /* seperate headers from body */
+        fprintf(fp, "%s\r\n", emailbody); /* write body to it. */
+        fclose(fp); /* close it. */
+        sprintf(cmd, "/usr/sbin/sendmail %s < %s", sendto, tempFile); /* prepare command. */
+        (void) system(cmd); /* execute it. */
+        /* remove temp file */
+        unlink(tempFile);
+}
+
