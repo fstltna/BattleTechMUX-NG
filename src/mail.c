@@ -3319,3 +3319,20 @@ void sendEmail(const char *sendto, const char *subject, const char *emailbody)
         unlink(tempFile);
 }
 
+/* Sends a system email */
+void sendSystemEmail(const char *subject, const char *emailbody)
+{
+        char cmd[255]; /* holds the cli command */
+        char tempFile[100];
+        strcpy(tempFile, tempnam("/tmp", "sendmail")); /* generate temp file name. */
+        FILE *fp = fopen(tempFile, "w"); /* open it for writing. */
+        fprintf(fp, "Subject: %s\r\n", subject); /* write body to it. */
+        fprintf(fp, "\r\n"); /* seperate headers from body */
+        fprintf(fp, "%s\r\n", emailbody); /* write body to it. */
+        fclose(fp); /* close it. */
+        sprintf(cmd, "/usr/sbin/sendmail %s < %s", "btmux@mekcity.com", tempFile); /* prepare command. ZZZ need to set this in config */
+        (void) system(cmd); /* execute it. */
+        /* remove temp file */
+        unlink(tempFile);
+}
+
